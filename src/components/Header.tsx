@@ -6,7 +6,7 @@ const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 100vw;
+  width: 100%;
 `
 
 const StyledHeader = styled.header`
@@ -15,7 +15,7 @@ const StyledHeader = styled.header`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  width: 100%;
+  width: 80%;
 `
 
 const StyledLogo = styled.div`
@@ -23,7 +23,9 @@ const StyledLogo = styled.div`
   color: #0284c7;
   font-size: 2rem;
   margin-left: 2rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.25rem;
+  font-family: Roboto, sans-serif;
+  font-weight: 700;
 `
 
 const StyledNav = styled.nav`
@@ -37,7 +39,9 @@ const StyledNav = styled.nav`
 
 const StyledText = styled.p`
   margin: 0 1rem;
-  color: lightgray;
+  font-family: Roboto, sans-serif;
+  font-size: 1rem;
+  color: #313131;
   :hover {
     color: gray;
   }
@@ -50,9 +54,10 @@ const StyledInput = styled.input`
   height: 2rem;
   background: transparent;
   margin: 0 1rem;
-  color: lightgray;
+  color: #313131;
   padding-left: 1rem;
   outline: none;
+  font-size: 1rem;
 `
 
 const StyledLine = styled.div`
