@@ -70,9 +70,9 @@ const Header = () => {
   return (
     <Wrapper>
       <StyledHeader>
-        <StyledLogo className="text-3xl w-1/2 text-[#0284c7]">Coin Tracker</StyledLogo>
-        <StyledNav className="flex flex-row items-center mx-0 justify-end w-1/2">
-          <StyledText className="mx-12">All Coins</StyledText>
+        <StyledLogo>Coin Tracker</StyledLogo>
+        <StyledNav>
+          <StyledText>All Coins</StyledText>
           <StyledInput placeholder="Search Coins"></StyledInput>
         </StyledNav>
       </StyledHeader>
