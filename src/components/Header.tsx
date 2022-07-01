@@ -1,5 +1,6 @@
 import React from "react"
 import styled from "styled-components"
+import { Link } from "react-router-dom"
 
 const Wrapper = styled.div`
   display: flex;
@@ -18,7 +19,7 @@ const StyledHeader = styled.header`
   width: 80%;
 `
 
-const StyledLogo = styled.div`
+const StyledLogoLink = styled(Link)`
   width: 50%;
   color: #0284c7;
   font-size: 2rem;
@@ -26,6 +27,7 @@ const StyledLogo = styled.div`
   margin-bottom: 0.25rem;
   font-family: Roboto, sans-serif;
   font-weight: 700;
+  text-decoration: none;
 `
 
 const StyledNav = styled.nav`
@@ -37,7 +39,7 @@ const StyledNav = styled.nav`
   margin: 0 1.5rem;
 `
 
-const StyledText = styled.p`
+const StyledLink = styled(Link)`
   margin: 0 1rem;
   font-family: Roboto, sans-serif;
   font-size: 1rem;
@@ -46,6 +48,7 @@ const StyledText = styled.p`
     color: gray;
   }
   cursor: pointer;
+  text-decoration: none;
 `
 
 const StyledInput = styled.input`
@@ -70,9 +73,9 @@ const Header = () => {
   return (
     <Wrapper>
       <StyledHeader>
-        <StyledLogo>Coin Tracker</StyledLogo>
+        <StyledLogoLink to={'/'}>Coin Tracker</StyledLogoLink>
         <StyledNav>
-          <StyledText>All Coins</StyledText>
+          <StyledLink to="/allcoins">All Coins</StyledLink>
           <StyledInput placeholder="Search Coins"></StyledInput>
         </StyledNav>
       </StyledHeader>
