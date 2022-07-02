@@ -10,6 +10,9 @@ interface PriceChangeProps {
   priceChangeColor: string
 }
 
+interface LinkProps {
+  haveNextPage: boolean
+}
 
 type CoinsType = [
   {
@@ -72,6 +75,33 @@ const StyledPriceChange = styled.td<PriceChangeProps>`
   display: fle;
 `
 
+const StyledLinkContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  width: 50%;
+  margin-top: 2rem;
+`
+
+const StyledLink = styled(Link) <LinkProps>`
+  background-color: #f5f5f5;
+  color: ${p => p.haveNextPage ? '#0284c7' : 'gray'};
+  border: 2px solid ${p => p.haveNextPage ? '#0284c7' : 'gray'};
+  border-radius: 4px;
+  min-width: 2rem;
+  padding: 0.5rem;
+  text-decoration: none;
+  text-align: center;
+  font-family: Roboto, sans-serif;
+  font-weight: 600;
+  :hover {
+    background-color: #0284c7;
+    color: #f5f5f5;
+  }
+  pointer-events: ${p => p.haveNextPage ? 'all' : 'none'};
+  user-select: none;
+`
 
 const CoinsList = ({ page }: CoinsListType) => {
   const [coins, setCoins] = useState<CoinsType>()
@@ -136,6 +166,15 @@ const CoinsList = ({ page }: CoinsListType) => {
           })}
         </tbody>
       </StyledTable>
+      <StyledLinkContainer>
+        <StyledLink haveNextPage={+page != 1} to={`/allcoins/${+page - 1}`}>
+          &lt; Previous Page
+        </StyledLink>
+        <div> Page {+page} </div>
+        <StyledLink haveNextPage={+page != 134} to={`/allcoins/${+page + 1}`}>
+          Next Page &gt;
+        </StyledLink>
+      </StyledLinkContainer>
     </Wrapper>
   )
 }
