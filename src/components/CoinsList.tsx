@@ -170,7 +170,7 @@ const CoinsList = ({ page }: CoinsListType) => {
         <StyledLink haveNextPage={+page != 1} to={`/allcoins/${+page - 1}`}>
           &lt; Previous Page
         </StyledLink>
-        <div> Page {+page} </div>
+        <div style={{userSelect: 'none'}}> Page {+page} </div>
         <StyledLink haveNextPage={+page != 134} to={`/allcoins/${+page + 1}`}>
           Next Page &gt;
         </StyledLink>
