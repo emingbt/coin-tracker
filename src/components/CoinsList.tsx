@@ -77,14 +77,11 @@ const CoinsList = () => {
     try {
       const response = await fetch(API_URL)
       const fetchedCoins = await response.json()
-      console.log("ALOGGG", fetchedCoins)
       setCoins(fetchedCoins)
     } catch (err) {
       console.log(err)
     }
   }
-
-  console.log("Rendered")
 
   return (
     <Wrapper>
