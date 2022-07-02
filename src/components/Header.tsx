@@ -75,7 +75,7 @@ const Header = () => {
       <StyledHeader>
         <StyledLogoLink to={'/'}>Coin Tracker</StyledLogoLink>
         <StyledNav>
-          <StyledLink to="/allcoins">All Coins</StyledLink>
+          <StyledLink to="/allcoins/1">All Coins</StyledLink>
           <StyledInput placeholder="Search Coins"></StyledInput>
         </StyledNav>
       </StyledHeader>

@@ -91,8 +91,8 @@ const TrendingCoins = () => {
       <StyledCardContainer>
         {trendingCoins?.map((e, i) => {
           return (
-            <StyledCard>
-              <img style={{ width: "80%" }} src={e.item.large} />
+            <StyledCard key={i}>
+              <img style={{ width: "80%" }} src={e.item.large} alt={e.item.name} />
               <p style={{ fontWeight: '700' }}>#{e.item.score + 1}-{e.item.symbol}</p>
               <p>{e.item.name}</p>
             </StyledCard>
