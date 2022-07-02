@@ -110,7 +110,7 @@ const CoinsList = ({ page }: CoinsListType) => {
 
   useEffect(() => {
     fetchCoins()
-  }, [])
+  }, [page])
 
 
   async function fetchCoins() {
