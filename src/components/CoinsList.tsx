@@ -1,38 +1,17 @@
 import React, { useEffect, useState } from "react"
 import styled from "styled-components"
+import { Link } from "react-router-dom"
 
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 4rem;
-`
+interface CoinsListType {
+  page: string
+}
 
-const StyledTable = styled.table`
-  width: 80%;
-  margin-left: 4rem;
-`
+interface PriceChangeProps {
+  priceChangeColor: string
+}
 
-const StyledTableRow = styled.tr`
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
-  justify-content: left;
-  border-bottom: 1px solid lightgray;
-  height: 2rem;
-`
 
-const StyledTableHead = styled.th`
-  text-align: start;
-  font-size: 20px;
-`
-
-const StyledTableData = styled.td`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-`
-
-type CoinListType = [
+type CoinsType = [
   {
     ath: number,
     ath_change_percentage: number,
@@ -63,10 +42,41 @@ type CoinListType = [
   }
 ]
 
-const CoinsList = () => {
-  const [coins, setCoins] = useState<CoinListType>()
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 4rem;
+`
 
-  const API_URL = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false"
+const StyledTable = styled.table`
+  width: 80%;
+  margin-left: 4rem;
+`
+
+const StyledTableRow = styled.tr`
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr 1fr 1fr 1fr;
+  justify-content: left;
+  border-bottom: 1px solid lightgray;
+  height: 2rem;
+`
+
+const StyledTableHead = styled.th`
+  text-align: start;
+  font-size: 20px;
+`
+
+const StyledPriceChange = styled.td<PriceChangeProps>`
+  color: ${props => props.priceChangeColor};
+  display: fle;
+`
+
+
+const CoinsList = ({ page }: CoinsListType) => {
+  const [coins, setCoins] = useState<CoinsType>()
+
+  const API_URL = `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=${+page}&sparkline=false`
 
   useEffect(() => {
     fetchCoins()
@@ -86,40 +96,45 @@ const CoinsList = () => {
   return (
     <Wrapper>
       <StyledTable>
-        <StyledTableRow>
-          <StyledTableHead style={{ marginLeft: "1rem" }}>#</StyledTableHead>
-          <StyledTableHead>Coin</StyledTableHead>
-          <StyledTableHead></StyledTableHead>
-          <StyledTableHead>Price</StyledTableHead>
-          <StyledTableHead>24h</StyledTableHead>
-          <StyledTableHead>24h Volume</StyledTableHead>
-        </StyledTableRow>
-        {coins?.map((e, i) => {
-          return (
-            <StyledTableRow key={i}>
-              <td style={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'start'
-              }}>
-                {/* <Star /> */}
-                {i + 1}
-              </td>
-              <td style={{
-                display: 'flex',
-                flexDirection: 'row',
-                alignItems: 'center'
-              }}>
-                <img style={{ height: "1.25rem", marginRight: '0.5rem' }} src={e.image} />
-                {e.name}
-              </td>
-              <td>{e.symbol.toUpperCase()}</td>
-              <td>{e.current_price}</td>
-              <td>{e.price_change_percentage_24h.toFixed(2)}%</td>
-              <td>{e.total_volume}</td>
-            </StyledTableRow>
-          )
-        })}
+        <thead>
+          <StyledTableRow>
+            <StyledTableHead style={{ marginLeft: "1rem" }}>#</StyledTableHead>
+            <StyledTableHead>Coin</StyledTableHead>
+            <StyledTableHead></StyledTableHead>
+            <StyledTableHead>Price</StyledTableHead>
+            <StyledTableHead>24h</StyledTableHead>
+            <StyledTableHead>24h Volume</StyledTableHead>
+          </StyledTableRow>
+        </thead>
+        <tbody>
+          {coins?.map((e, i) => {
+            let priceChangeColor = e.price_change_percentage_24h > 0 ? "green" : e.price_change_percentage_24h == null ? 'gray' : 'red'
+
+            return (
+              <StyledTableRow key={i}>
+                <td style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  justifyContent: 'start'
+                }}>
+                  {(+page - 1) * 100 + i + 1}
+                </td>
+                <td style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  alignItems: 'center'
+                }}>
+                  <img style={{ height: "1.25rem", marginRight: '0.5rem' }} src={e.image} alt={e.id} />
+                  {e.name}
+                </td>
+                <td>{e.symbol.toUpperCase()}</td>
+                <td>{e.current_price}</td>
+                <StyledPriceChange priceChangeColor={priceChangeColor}>{Math.abs(e.price_change_percentage_24h)?.toFixed(2)}%</StyledPriceChange>
+                <td>{e.total_volume}</td>
+              </StyledTableRow>
+            )
+          })}
+        </tbody>
       </StyledTable>
     </Wrapper>
   )
