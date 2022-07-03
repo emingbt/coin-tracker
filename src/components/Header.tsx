@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import styled from "styled-components"
 import { Link } from "react-router-dom"
 
@@ -20,7 +20,7 @@ const StyledHeader = styled.header`
 `
 
 const StyledLogoLink = styled(Link)`
-  width: 50%;
+  width: 40%;
   color: #0284c7;
   font-size: 2rem;
   margin-left: 2rem;
@@ -35,7 +35,7 @@ const StyledNav = styled.nav`
   flex-direction: row;
   align-items: center;
   justify-content: end;
-  width: 50%;
+  width: 60%;
   margin: 0 1.5rem;
 `
 
@@ -50,6 +50,12 @@ const StyledLink = styled(Link)`
   cursor: pointer;
   text-decoration: none;
 `
+const StyledForm = styled.form`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+`
 
 const StyledInput = styled.input`
   border: 2px solid #0284c7;
@@ -63,6 +69,21 @@ const StyledInput = styled.input`
   font-size: 1rem;
 `
 
+const StyledSubmit = styled.input`
+  height: 2rem;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+  margin-left: -0.5rem;
+  border: 2px solid #0284c7;
+  color: #0284c7;
+  font-weight: 600;
+  cursor: pointer;
+  :hover {
+    background-color: #0284c7;
+    color: #f5f5f5;
+  }
+`
+
 const StyledLine = styled.div`
   height: 2px;
   width: 100%;
@@ -70,13 +91,31 @@ const StyledLine = styled.div`
 `
 
 const Header = () => {
+  const [coin, setCoin] = useState('')
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCoin(e.target.value)
+  }
+
+
   return (
     <Wrapper>
       <StyledHeader>
         <StyledLogoLink to={'/'}>Coin Tracker</StyledLogoLink>
         <StyledNav>
           <StyledLink to="/allcoins/1">All Coins</StyledLink>
-          <StyledInput placeholder="Search Coins"></StyledInput>
+          <StyledForm>
+            <StyledInput
+              placeholder="Search Coins"
+              type="text"
+              id="coin"
+              name="coin"
+              onChange={handleChange}
+              value={coin} />
+            <StyledLink to='/'>
+              <StyledSubmit type='submit' value='Search' />
+            </StyledLink>
+          </StyledForm>
         </StyledNav>
       </StyledHeader>
       <StyledLine />
