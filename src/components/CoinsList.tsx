@@ -6,6 +6,10 @@ interface CoinsListType {
   page: string
 }
 
+interface TableData {
+  primary?: boolean
+}
+
 interface PriceChangeProps {
   priceChangeColor: string
 }
@@ -63,11 +67,20 @@ const StyledTableRow = styled.tr`
   justify-content: left;
   border-bottom: 1px solid lightgray;
   height: 2rem;
+  :hover {
+    background-color: #ececec;
+  }
 `
 
 const StyledTableHead = styled.th`
   text-align: start;
   font-size: 20px;
+`
+
+const StyledTableData = styled.td<TableData>`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 `
 
 const StyledPriceChange = styled.td<PriceChangeProps>`
@@ -142,25 +155,21 @@ const CoinsList = ({ page }: CoinsListType) => {
 
             return (
               <StyledTableRow key={i}>
-                <td style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  justifyContent: 'start'
-                }}>
+                <StyledTableData>
                   {(+page - 1) * 100 + i + 1}
-                </td>
-                <td style={{
+                </StyledTableData>
+                <StyledTableData style={{
                   display: 'flex',
                   flexDirection: 'row',
                   alignItems: 'center'
                 }}>
                   <img style={{ height: "1.25rem", marginRight: '0.5rem' }} src={e.image} alt={e.id} />
-                  {e.name}
-                </td>
-                <td>{e.symbol.toUpperCase()}</td>
-                <td>{e.current_price}</td>
+                  <Link to={`/coin/${e.id}`}>{e.name}</Link>
+                </StyledTableData>
+                <StyledTableData>{e.symbol.toUpperCase()}</StyledTableData>
+                <StyledTableData>{e.current_price}</StyledTableData>
                 <StyledPriceChange priceChangeColor={priceChangeColor}>{Math.abs(e.price_change_percentage_24h)?.toFixed(2)}%</StyledPriceChange>
-                <td>{e.total_volume}</td>
+                <StyledTableData>{e.total_volume}</StyledTableData>
               </StyledTableRow>
             )
           })}
@@ -170,7 +179,7 @@ const CoinsList = ({ page }: CoinsListType) => {
         <StyledLink haveNextPage={+page !== 1} to={`/allcoins/${+page - 1}`}>
           &lt; Previous Page
         </StyledLink>
-        <div style={{userSelect: 'none'}}> Page {+page} </div>
+        <div style={{ userSelect: 'none' }}> Page {+page} </div>
         <StyledLink haveNextPage={+page !== 134} to={`/allcoins/${+page + 1}`}>
           Next Page &gt;
         </StyledLink>
