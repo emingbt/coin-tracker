@@ -84,7 +84,7 @@ const CoinSearch = ({ query }: CoinList) => {
       <StyledTable>
         <thead>
           <StyledTableRow>
-            <StyledTableHead style={{ marginLeft: "1rem" }}>#</StyledTableHead>
+            <StyledTableHead primary>#</StyledTableHead>
             <StyledTableHead>Coin</StyledTableHead>
             <StyledTableHead></StyledTableHead>
             <StyledTableHead>Market Cap Rank</StyledTableHead>
@@ -94,19 +94,14 @@ const CoinSearch = ({ query }: CoinList) => {
           {coins?.map((e, i) => {
             return (
               <StyledTableRow key={i}>
-                <StyledTableData style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  justifyContent: 'start'
-                }}>
+                <StyledTableData>
+                  <div>
+                    <Star/>
+                  </div>
                   {i + 1}
                 </StyledTableData>
-                <StyledTableData style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  alignItems: 'center'
-                }}>
-                  <img style={{ height: "1.25rem", marginRight: '0.5rem' }} src={e.large} alt={e.id} />
+                <StyledTableData>
+                  <StyledImage src={e.large} alt={e.id} />
                   {e.name}
                 </StyledTableData>
                 <StyledTableData>{e.symbol.toUpperCase()}</StyledTableData>

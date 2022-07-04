@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react"
 import styled from "styled-components"
 import { Link } from "react-router-dom"
+import Star from "./svg/Star"
+import useStore from '../store'
 
 interface CoinsListType {
   page: string
 }
 
-interface TableData {
+interface TableHead {
   primary?: boolean
 }
 
@@ -59,6 +61,7 @@ const Wrapper = styled.div`
 const StyledTable = styled.table`
   width: 80%;
   margin-left: 4rem;
+  color: #3f3f3f;
 `
 
 const StyledTableRow = styled.tr`
@@ -72,15 +75,31 @@ const StyledTableRow = styled.tr`
   }
 `
 
-const StyledTableHead = styled.th`
+const StyledTableHead = styled.th<TableHead>`
   text-align: start;
   font-size: 20px;
+  margin-left: ${props => props.primary ? '1rem' : '0'};
 `
 
-const StyledTableData = styled.td<TableData>`
+const StyledTableData = styled.td`
   display: flex;
   flex-direction: row;
   align-items: center;
+`
+
+
+const StyledImage = styled.img`
+  height: 1.25rem;
+   margin-right: 0.5rem;
+`
+
+const StyledLink = styled(Link)`
+  text-decoration: none;
+  color: #3f3f3f;
+`
+
+const StyledText = styled.div`
+  user-select: none;
 `
 
 const StyledPriceChange = styled.td<PriceChangeProps>`
@@ -88,7 +107,7 @@ const StyledPriceChange = styled.td<PriceChangeProps>`
   display: fle;
 `
 
-const StyledLinkContainer = styled.div`
+const StyledPageLinkContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -97,7 +116,7 @@ const StyledLinkContainer = styled.div`
   margin-top: 2rem;
 `
 
-const StyledLink = styled(Link) <LinkProps>`
+const StyledPageLink = styled(Link) <LinkProps>`
   background-color: #f5f5f5;
   color: ${props => props.haveNextPage ? '#0284c7' : 'gray'};
   border: 2px solid ${props => props.haveNextPage ? '#0284c7' : 'gray'};
@@ -136,12 +155,29 @@ const CoinsList = ({ page }: CoinsListType) => {
     }
   }
 
+  const favoriteCoins = useStore((state) => state.favoriteCoins)
+  const addFavorite = useStore(state => state.addFavorite)
+  const removeFavorite = useStore(state => state.removeFavorite)
+  console.log(favoriteCoins)
+
+  const addToFavorites = (e: string) => {
+    if(favoriteCoins.includes(e)) {
+      favoriteCoins.splice(favoriteCoins.indexOf(e), 1)
+      console.log(favoriteCoins, "AL:O)GGG")
+      removeFavorite(favoriteCoins)
+      return
+    }
+    addFavorite(e)
+
+    console.log('TEST', favoriteCoins, "TESTTE")
+  }
+
   return (
     <Wrapper>
       <StyledTable>
         <thead>
           <StyledTableRow>
-            <StyledTableHead style={{ marginLeft: "1rem" }}>#</StyledTableHead>
+            <StyledTableHead primary>#</StyledTableHead>
             <StyledTableHead>Coin</StyledTableHead>
             <StyledTableHead></StyledTableHead>
             <StyledTableHead>Price</StyledTableHead>
@@ -156,15 +192,14 @@ const CoinsList = ({ page }: CoinsListType) => {
             return (
               <StyledTableRow key={i}>
                 <StyledTableData>
-                  {(+page - 1) * 100 + i + 1}
+                  <div onClick={() => addToFavorites(e.id)}>
+                    <Star selected={favoriteCoins.includes(e.id)}/>
+                  </div>
+                  | {(+page - 1) * 100 + i + 1}
                 </StyledTableData>
-                <StyledTableData style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  alignItems: 'center'
-                }}>
-                  <img style={{ height: "1.25rem", marginRight: '0.5rem' }} src={e.image} alt={e.id} />
-                  <Link to={`/coin/${e.id}`}>{e.name}</Link>
+                <StyledTableData>
+                  <StyledImage src={e.image} alt={e.id} />
+                  <StyledLink to={`/coin/${e.id}`}>{e.name}</StyledLink>
                 </StyledTableData>
                 <StyledTableData>{e.symbol.toUpperCase()}</StyledTableData>
                 <StyledTableData>{e.current_price}</StyledTableData>
@@ -175,15 +210,15 @@ const CoinsList = ({ page }: CoinsListType) => {
           })}
         </tbody>
       </StyledTable>
-      <StyledLinkContainer>
-        <StyledLink haveNextPage={+page !== 1} to={`/allcoins/${+page - 1}`}>
+      <StyledPageLinkContainer>
+        <StyledPageLink haveNextPage={+page > 1} to={`/allcoins/${+page - 1}`}>
           &lt; Previous Page
-        </StyledLink>
-        <div style={{ userSelect: 'none' }}> Page {+page} </div>
-        <StyledLink haveNextPage={+page !== 134} to={`/allcoins/${+page + 1}`}>
+        </StyledPageLink>
+        <StyledText> Page {+page} </StyledText>
+        <StyledPageLink haveNextPage={+page < 134} to={`/allcoins/${+page + 1}`}>
           Next Page &gt;
-        </StyledLink>
-      </StyledLinkContainer>
+        </StyledPageLink>
+      </StyledPageLinkContainer>
     </Wrapper>
   )
 }
