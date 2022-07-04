@@ -97,7 +97,6 @@ const Header = () => {
     setCoin(e.target.value)
   }
 
-
   return (
     <Wrapper>
       <StyledHeader>
@@ -112,7 +111,7 @@ const Header = () => {
               name="coin"
               onChange={handleChange}
               value={coin} />
-            <StyledLink to='/'>
+            <StyledLink to={`/search/${coin}`}>
               <StyledSubmit type='submit' value='Search' />
             </StyledLink>
           </StyledForm>
