@@ -17,8 +17,6 @@ const Wrapper = styled.div`
 const Search = () => {
   const { query } = useParams<Params>()
 
-  console.log(query)
-
   return (
     <Wrapper>
       <Header />
