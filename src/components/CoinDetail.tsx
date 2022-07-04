@@ -79,11 +79,6 @@ interface DetailPrice {
   priceChangeColor?: string
 }
 
-interface Container {
-  chart?: boolean
-}
-
-
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -116,6 +111,11 @@ const StyledDetailName = styled.div`
   padding: 0 1rem;
   font-size: 1.5rem;
   margin: 0.5rem;
+`
+
+const StyledImage = styled.img`
+   height: 4rem;
+   margin-right: 0.5rem;
 `
 
 const StyledDetailPriceContainer = styled.div`
@@ -203,10 +203,7 @@ const CoinDetail = ({ coinId }: CoinDetailProps) => {
       <StyledContainer>
         <StyledDetailContainer>
           <StyledDetailName>
-            <img
-              style={{ height: "4rem", marginRight: '0.5rem' }}
-              src={coinDetails?.image.large}
-              alt={coinDetails?.id} />
+            <StyledImage src={coinDetails?.image.large} alt={coinDetails?.id} />
             <div>{coinDetails?.name} ({coinDetails?.symbol.toUpperCase()})</div>
           </StyledDetailName>
           <StyledDetailPriceContainer>
@@ -228,7 +225,7 @@ const CoinDetail = ({ coinId }: CoinDetailProps) => {
         </StyledDetailContainer>
         <StyledDetailContainer>
           <LineChart
-            width={750}
+            width={700}
             height={300}
             data={chartData}
             margin={{

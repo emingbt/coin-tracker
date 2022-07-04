@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
+import Star from './svg/Star'
 
 type SearhedCoins = [{
   id: string,
@@ -12,6 +13,10 @@ type SearhedCoins = [{
 
 interface CoinList {
   query: string
+}
+
+interface TableHead {
+  primary?: boolean
 }
 
 const Wrapper = styled.div`
@@ -35,9 +40,10 @@ const StyledTableRow = styled.tr`
   height: 4rem;
 `
 
-const StyledTableHead = styled.th`
+const StyledTableHead = styled.th<TableHead>`
   text-align: start;
   font-size: 1.5rem;
+  margin-left: ${props => props.primary ? '1rem' : '0'};
 `
 
 const StyledTableData = styled.td`
@@ -45,6 +51,11 @@ const StyledTableData = styled.td`
   flex-direction: row;
   align-items: center;
   font-size: 1.25rem;
+`
+
+const StyledImage = styled.img`
+  height: 1.25rem;
+   margin-right: 0.5rem;
 `
 
 const CoinSearch = ({ query }: CoinList) => {
