@@ -1,6 +1,26 @@
 import React, { useEffect, useState } from "react"
 import styled from "styled-components"
 
+type TrendingCoinsType = [{
+  item: {
+    id: string,
+    coin_id: number,
+    name: string,
+    symbol: string,
+    market_cap_rank: number,
+    thumb: string,
+    small: string,
+    large: string,
+    slug: string,
+    price_btc: number,
+    score: number
+  }
+}]
+
+interface Text {
+  symbol?: boolean
+}
+
 const Wrapper = styled.div`
   background-color: #ececec;
   width: 100%;
@@ -10,6 +30,10 @@ const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+`
+
+const StyledTitle = styled.p`
+  margin: 16px;
 `
 
 const StyledLine = styled.div`
@@ -47,21 +71,13 @@ const StyledCard = styled.div`
   box-shadow: 0 1px 4px;
 `
 
-type TrendingCoinsType = [{
-  item: {
-    id: string,
-    coin_id: number,
-    name: string,
-    symbol: string,
-    market_cap_rank: number,
-    thumb: string,
-    small: string,
-    large: string,
-    slug: string,
-    price_btc: number,
-    score: number
-  }
-}]
+const StyledImage = styled.img`
+  width: 80%;
+`
+
+const StyledText = styled.p<Text>`
+  ${props => props.symbol && 'font-weight: 600;'}
+`
 
 const TrendingCoins = () => {
   const [trendingCoins, setTrendingCoins] = useState<TrendingCoinsType>()
@@ -85,16 +101,16 @@ const TrendingCoins = () => {
   return (
     <Wrapper>
       <StyledContainer>
-        <p style={{ margin: 16 }}>Trending Coins</p>
+        <StyledTitle>Trending Coins</StyledTitle>
         <StyledLine />
       </StyledContainer>
       <StyledCardContainer>
         {trendingCoins?.map((e, i) => {
           return (
             <StyledCard key={i}>
-              <img style={{ width: "80%" }} src={e.item.large} alt={e.item.name} />
-              <p style={{ fontWeight: '700' }}>#{e.item.score + 1}-{e.item.symbol}</p>
-              <p>{e.item.name}</p>
+              <StyledImage src={e.item.large} alt={e.item.name} />
+              <StyledText symbol>#{e.item.score + 1}-{e.item.symbol}</StyledText>
+              <StyledText>{e.item.name}</StyledText>
             </StyledCard>
           )
         })}
