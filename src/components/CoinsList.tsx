@@ -163,13 +163,11 @@ const CoinsList = ({ page }: CoinsListType) => {
   const addToFavorites = (e: string) => {
     if(favoriteCoins.includes(e)) {
       favoriteCoins.splice(favoriteCoins.indexOf(e), 1)
-      console.log(favoriteCoins, "AL:O)GGG")
       removeFavorite(favoriteCoins)
       return
     }
-    addFavorite(e)
 
-    console.log('TEST', favoriteCoins, "TESTTE")
+    addFavorite(e)
   }
 
   return (
