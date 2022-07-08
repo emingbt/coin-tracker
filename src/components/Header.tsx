@@ -1,6 +1,8 @@
 import React, { useState } from "react"
 import styled from "styled-components"
 import { Link } from "react-router-dom"
+import useStore from "../store"
+import FavoriteCoinsBar from "./FavoriteCoinsBar"
 
 const Wrapper = styled.div`
   display: flex;
@@ -87,7 +89,7 @@ const StyledSubmit = styled.input`
 const StyledLine = styled.div`
   height: 2px;
   width: 100%;
-  background-color: #0284c7;
+  background-color: #00a0f0;
 `
 
 const Header = () => {
@@ -118,6 +120,7 @@ const Header = () => {
         </StyledNav>
       </StyledHeader>
       <StyledLine />
+      <FavoriteCoinsBar />
     </Wrapper>
   )
 }
