@@ -51,6 +51,7 @@ const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
   margin-top: 4rem;
+  min-height: 55vh;
 `
 
 const StyledTable = styled.table`
