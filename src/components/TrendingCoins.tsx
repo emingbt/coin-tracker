@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react"
+import { Link } from "react-router-dom"
 import styled from "styled-components"
 
 type TrendingCoinsType = [{
@@ -56,19 +57,29 @@ const StyledCardContainer = styled.div`
   width: 80%;
   height: 80%;
 `
+
 const StyledCard = styled.div`
   height: 75%;
   min-width: 10%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-around;
   margin: 0.33rem;
-  padding: 0.5rem;
   border-radius: 1rem;
   font-family: Roboto, sans-serif;
   background-color: #f5f5f5;
   box-shadow: 0 1px 4px;
+  :hover {
+    background-color:#ebebeb;
+  }
+`
+
+const StyledLink = styled(Link)`
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  padding: 0.5rem;
+  text-decoration: none;
+  color: #3f3f3f;
 `
 
 const StyledImage = styled.img`
@@ -108,9 +119,11 @@ const TrendingCoins = () => {
         {trendingCoins?.map((e, i) => {
           return (
             <StyledCard key={i}>
-              <StyledImage src={e.item.large} alt={e.item.name} />
-              <StyledText symbol>#{e.item.score + 1}-{e.item.symbol}</StyledText>
-              <StyledText>{e.item.name}</StyledText>
+              <StyledLink to={`/coin/${e.item.id}`}>
+                <StyledImage src={e.item.large} alt={e.item.name} />
+                <StyledText symbol>#{e.item.score + 1}-{e.item.symbol}</StyledText>
+                <StyledText>{e.item.name}</StyledText>
+              </StyledLink>
             </StyledCard>
           )
         })}
