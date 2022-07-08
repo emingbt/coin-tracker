@@ -1,8 +1,12 @@
 import React from "react"
 import styled from "styled-components"
 
+interface Text{
+  bold?: boolean
+  verb?: boolean
+}
+
 const Wrapper = styled.div`
-  background-color: #ececec;
   width: 100%;
   height: 60vh;
   margin-top: 4rem;
@@ -12,25 +16,55 @@ const Wrapper = styled.div`
 `
 
 const StyledBanner = styled.div`
-  width: 80%;
+  width: 100%;
   height: 80%;
-  background-image: repeating-linear-gradient(to left top, #0284c7, #ececec);
-  border-radius: 1rem;
-  vertical-align: middle;
+  background-image: repeating-linear-gradient(to left, #1b8cc5, #41c3ff);
+  display: grid;
+  grid-template-columns: 2fr 1fr 2fr;
+  align-items: center;
+  font-size: 2rem;
+  font-family: Roboto, sans-serif;
+  font-weight: 600;
+  color: #f5f5f5;
+`
+
+const StyledTitle = styled.div`
+  font-size: 4rem;
+  height: 100%;
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 4rem;
-  font-family: Roboto, sans-serif;
-  font-weight: 600;
-  color: #e6e6e6;
+`
+
+
+
+const StyledTextContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`
+
+const StyledText = styled.p<Text>`
+  margin: 0.5rem 0;
+  font-weight: 400;
+  ${props => props.bold && 'font-weight: 900'};
+  font-size: ${props => props.verb ? '3.5rem' : '2.5rem'};
 `
 
 const Banner = () => {
   return (
     <Wrapper>
       <StyledBanner>
-        Best place to track crypto
+        <StyledTitle>Coin Tracker</StyledTitle>
+        <StyledTextContainer>
+          <StyledText verb bold >EASY</StyledText>
+          <StyledText verb bold >FAST</StyledText>
+          <StyledText verb bold >SAFE</StyledText>
+        </StyledTextContainer>
+        <StyledTextContainer>
+          <StyledText>way to track crypto</StyledText>
+        </StyledTextContainer>
       </StyledBanner>
     </Wrapper>
   )
