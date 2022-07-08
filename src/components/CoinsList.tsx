@@ -78,7 +78,7 @@ const StyledTableRow = styled.tr`
 const StyledTableHead = styled.th<TableHead>`
   text-align: start;
   font-size: 20px;
-  margin-left: ${props => props.primary ? '1rem' : '0'};
+  margin-left: ${props => props.primary ? '1.5rem' : '0'};
 `
 
 const StyledTableData = styled.td`
@@ -86,7 +86,11 @@ const StyledTableData = styled.td`
   flex-direction: row;
   align-items: center;
 `
-
+const StyledStarContainer = styled.div`
+  margin-top: 2px;
+  margin-right: 4px;
+  cursor: pointer;
+`
 
 const StyledImage = styled.img`
   height: 1.25rem;
@@ -158,6 +162,7 @@ const CoinsList = ({ page }: CoinsListType) => {
   const favoriteCoins = useStore((state) => state.favoriteCoins)
   const addFavorite = useStore(state => state.addFavorite)
   const removeFavorite = useStore(state => state.removeFavorite)
+
   console.log(favoriteCoins)
 
   const addToFavorites = (e: string) => {
@@ -190,17 +195,17 @@ const CoinsList = ({ page }: CoinsListType) => {
             return (
               <StyledTableRow key={i}>
                 <StyledTableData>
-                  <div onClick={() => addToFavorites(e.id)}>
-                    <Star selected={favoriteCoins.includes(e.id)}/>
-                  </div>
-                  | {(+page - 1) * 100 + i + 1}
+                  <StyledStarContainer onClick={() => addToFavorites(e.id)} style={{ marginTop: '2px', marginRight: '4px'}}>
+                    <Star selected={favoriteCoins.includes(e.id)} />
+                  </StyledStarContainer>
+                  {(+page - 1) * 100 + i + 1}
                 </StyledTableData>
                 <StyledTableData>
                   <StyledImage src={e.image} alt={e.id} />
                   <StyledLink to={`/coin/${e.id}`}>{e.name}</StyledLink>
                 </StyledTableData>
                 <StyledTableData>{e.symbol.toUpperCase()}</StyledTableData>
-                <StyledTableData>{e.current_price}</StyledTableData>
+                <StyledTableData>${e.current_price}</StyledTableData>
                 <StyledPriceChange priceChangeColor={priceChangeColor}>{Math.abs(e.price_change_percentage_24h)?.toFixed(2)}%</StyledPriceChange>
                 <StyledTableData>{e.total_volume}</StyledTableData>
               </StyledTableRow>
