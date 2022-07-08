@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import useStore from '../store'
 import { Link } from 'react-router-dom'
 import Star from "./svg/Star"
+import SimpleChart from './charts/SimpleChart'
 
 type FavoriteCoins = [
   {
@@ -43,7 +44,7 @@ interface PriceChangeProps {
 }
 
 interface LinkProps {
-  haveNextPage: boolean
+  primary?: boolean
 }
 
 const Wrapper = styled.div`
@@ -62,10 +63,12 @@ const StyledTable = styled.table`
 
 const StyledTableRow = styled.tr`
   display: grid;
-  grid-template-columns: 1fr 2fr 1fr 1fr 1fr 1fr;
+  grid-template-columns: 0.5fr 2fr 1fr 1fr 1fr 1fr 1fr;
   justify-content: left;
+  align-items: center;
   border-bottom: 1px solid lightgray;
-  height: 2rem;
+  font-size: 1.25rem;
+  /* height: 3rem; */
   :hover {
     background-color: #ececec;
   }
@@ -73,7 +76,7 @@ const StyledTableRow = styled.tr`
 
 const StyledTableHead = styled.th`
   text-align: start;
-  font-size: 20px;
+  font-size: 1.5rem;
 `
 
 const StyledTableData = styled.td`
@@ -92,9 +95,9 @@ const StyledImage = styled.img`
    margin-right: 0.5rem;
 `
 
-const StyledLink = styled(Link)`
+const StyledLink = styled(Link) <LinkProps>`
   text-decoration: none;
-  color: #00a0f0;
+  color: ${props => props.primary ? '#00a0f0' : '#3f3f3f'};
 `
 
 const StyledPriceChange = styled.td<PriceChangeProps>`
@@ -150,8 +153,6 @@ const FavoriteCoinsList = () => {
     addFavorite(e)
   }
 
-  console.log("ALOO", favoriteCoinIds)
-
   return (
     <Wrapper>
       {favoriteCoinIds.length != 0 ?
@@ -164,6 +165,7 @@ const FavoriteCoinsList = () => {
               <StyledTableHead>Price</StyledTableHead>
               <StyledTableHead>24h</StyledTableHead>
               <StyledTableHead>24h Volume</StyledTableHead>
+              <StyledTableHead>Last 7 days</StyledTableHead>
             </StyledTableRow>
           </thead>
           <tbody>
@@ -184,7 +186,8 @@ const FavoriteCoinsList = () => {
                   <StyledTableData>{e.symbol.toUpperCase()}</StyledTableData>
                   <StyledTableData>${e.current_price}</StyledTableData>
                   <StyledPriceChange priceChangeColor={priceChangeColor}>{Math.abs(e.price_change_percentage_24h)?.toFixed(2)}%</StyledPriceChange>
-                  <StyledTableData>{e.total_volume}</StyledTableData>
+                  <StyledTableData>${e.total_volume}</StyledTableData>
+                  <StyledTableData><SimpleChart chartData={e.sparkline_in_7d.price} /></StyledTableData>
                 </StyledTableRow>
               )
             })}
@@ -201,7 +204,7 @@ const FavoriteCoinsList = () => {
           <br />
           <StyledText>
             you can find them
-            <StyledLink to='/allcoins/1'> here</StyledLink>
+            <StyledLink to='/allcoins/1' primary> here</StyledLink>
           </StyledText>
         </StyledNoFavoriteContainer>
       }
