@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import Star from './svg/Star'
+import useStore from '../store'
 
 type SearhedCoins = [{
   id: string,
@@ -53,6 +54,11 @@ const StyledTableData = styled.td`
   font-size: 1.25rem;
 `
 
+const StyledStarContainer = styled.div`
+  margin-top: 4px;
+  cursor: pointer;
+`
+
 const StyledImage = styled.img`
   height: 1.25rem;
    margin-right: 0.5rem;
@@ -79,6 +85,20 @@ const CoinSearch = ({ query }: CoinList) => {
     }
   }
 
+  const favoriteCoins = useStore((state) => state.favoriteCoins)
+  const addFavorite = useStore(state => state.addFavorite)
+  const removeFavorite = useStore(state => state.removeFavorite)
+
+  const addToFavorites = (e: string) => {
+    if (favoriteCoins.includes(e)) {
+      favoriteCoins.splice(favoriteCoins.indexOf(e), 1)
+      removeFavorite(favoriteCoins)
+      return
+    }
+
+    addFavorite(e)
+  }
+
   return (
     <Wrapper>
       <StyledTable>
@@ -95,10 +115,9 @@ const CoinSearch = ({ query }: CoinList) => {
             return (
               <StyledTableRow key={i}>
                 <StyledTableData>
-                  <div>
-                    <Star/>
-                  </div>
-                  {i + 1}
+                  <StyledStarContainer onClick={() => addToFavorites(e.id)} >
+                    <Star selected={favoriteCoins.includes(e.id)} />
+                  </StyledStarContainer>
                 </StyledTableData>
                 <StyledTableData>
                   <StyledImage src={e.large} alt={e.id} />
