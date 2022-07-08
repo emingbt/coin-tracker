@@ -118,6 +118,12 @@ const StyledImage = styled.img`
    margin-right: 0.5rem;
 `
 
+const StyledStarContainer = styled.div`
+  margin-top: 4px;
+  margin-left: 8px;
+  cursor: pointer;
+`
+
 const StyledDetailPriceContainer = styled.div`
   display: flex;
   flex-direction: row;
@@ -197,6 +203,19 @@ const CoinDetail = ({ coinId }: CoinDetailProps) => {
     }
   }
 
+  const favoriteCoins = useStore((state) => state.favoriteCoins)
+  const addFavorite = useStore(state => state.addFavorite)
+  const removeFavorite = useStore(state => state.removeFavorite)
+
+  const addToFavorites = (e: string) => {
+    if (favoriteCoins.includes(e)) {
+      favoriteCoins.splice(favoriteCoins.indexOf(e), 1)
+      removeFavorite(favoriteCoins)
+      return
+    }
+
+    addFavorite(e)
+  }
 
   return (
     <Wrapper>
@@ -205,6 +224,9 @@ const CoinDetail = ({ coinId }: CoinDetailProps) => {
           <StyledDetailName>
             <StyledImage src={coinDetails?.image.large} alt={coinDetails?.id} />
             <div>{coinDetails?.name} ({coinDetails?.symbol.toUpperCase()})</div>
+            <StyledStarContainer onClick={() => addToFavorites(coinId)} >
+              <Star selected={favoriteCoins.includes(coinId)} />
+            </StyledStarContainer>
           </StyledDetailName>
           <StyledDetailPriceContainer>
             <StyledDetailPrice primary>${coinDetails?.market_data.current_price.usd}</StyledDetailPrice>
