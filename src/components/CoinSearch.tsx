@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import Star from './svg/Star'
 import useStore from '../store'
@@ -27,14 +28,28 @@ const Wrapper = styled.div`
   margin-top: 4rem;
 `
 
+const StyledTitleContainer = styled.div`
+  width: 75%;
+`
+
+const StyledTitle = styled.h1`
+  font-family: Roboto, sans-serif;
+  margin-left: 1rem;
+`
+
+const StyledLine = styled.div`
+  height: 2px;
+  width: 100%;
+  background-color: #0284c7;
+`
+
 const StyledTable = styled.table`
   width: 75%;
-  margin-left: 4rem;
 `
 
 const StyledTableRow = styled.tr`
   display: grid;
-  grid-template-columns: 1fr 2fr 1fr 2fr;
+  grid-template-columns: 0.25fr 2fr 1fr 1fr;
   align-items: center;
   justify-content: left;
   border-bottom: 1px solid lightgray;
@@ -57,6 +72,14 @@ const StyledTableData = styled.td`
 const StyledStarContainer = styled.div`
   margin-top: 4px;
   cursor: pointer;
+`
+
+const StyledLink = styled(Link)`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  text-decoration: none;
+  color: #1b1b1b;
 `
 
 const StyledImage = styled.img`
@@ -101,10 +124,14 @@ const CoinSearch = ({ query }: CoinList) => {
 
   return (
     <Wrapper>
+      <StyledTitleContainer>
+        <StyledTitle>Search results for "{query.toUpperCase()}"</StyledTitle>
+        <StyledLine />
+      </StyledTitleContainer>
       <StyledTable>
         <thead>
           <StyledTableRow>
-            <StyledTableHead primary>#</StyledTableHead>
+            <StyledTableHead></StyledTableHead>
             <StyledTableHead>Coin</StyledTableHead>
             <StyledTableHead></StyledTableHead>
             <StyledTableHead>Market Cap Rank</StyledTableHead>
@@ -120,8 +147,10 @@ const CoinSearch = ({ query }: CoinList) => {
                   </StyledStarContainer>
                 </StyledTableData>
                 <StyledTableData>
-                  <StyledImage src={e.large} alt={e.id} />
-                  {e.name}
+                  <StyledLink to={`/coin/${e.id}`}>
+                    <StyledImage src={e.large} alt={e.id} />
+                    {e.name}
+                  </StyledLink>
                 </StyledTableData>
                 <StyledTableData>{e.symbol.toUpperCase()}</StyledTableData>
                 <StyledTableData>#{e.market_cap_rank}</StyledTableData>
