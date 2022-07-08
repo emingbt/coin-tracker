@@ -108,7 +108,6 @@ const StyledText = styled.div`
 
 const StyledPriceChange = styled.td<PriceChangeProps>`
   color: ${props => props.priceChangeColor};
-  display: fle;
 `
 
 const StyledPageLinkContainer = styled.div`
