@@ -206,7 +206,7 @@ const CoinsList = ({ page }: CoinsListType) => {
                 <StyledTableData>{e.symbol.toUpperCase()}</StyledTableData>
                 <StyledTableData>${e.current_price}</StyledTableData>
                 <StyledPriceChange priceChangeColor={priceChangeColor}>{Math.abs(e.price_change_percentage_24h)?.toFixed(2)}%</StyledPriceChange>
-                <StyledTableData>{e.total_volume}</StyledTableData>
+                <StyledTableData>${e.total_volume}</StyledTableData>
               </StyledTableRow>
             )
           })}
