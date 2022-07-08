@@ -37,6 +37,10 @@ type FavoriteCoins = [
   }
 ]
 
+interface ContainerProps {
+  hasCoin: boolean
+}
+
 interface PriceChangeProps {
   priceChangeColor: string
 }
@@ -45,13 +49,19 @@ interface TextProps {
   symbol?: boolean
 }
 
+const StyledFavoriteCoinsContainer = styled.div<ContainerProps>`
+  width:100%;
+  visibility: ${props => props.hasCoin ? 'visible' : 'hidden'};
+  height: ${props => props.hasCoin ? '2rem' : '0'};
+`
+
 const StyledFavoriteCoinsBar = styled.div`
   width: 100%;
-  height: 2rem;
+  height: 100%;
   display: flex;
   flex-direction: row;
   align-items: center;
-  overflow: inherit;
+  overflow: hidden;
 `
 
 const StyledFavoriteCoin = styled.div`
@@ -76,7 +86,7 @@ const StyledLink = styled(Link)`
 const StyledText = styled.p<TextProps>`
   font-family: Roboto, sans-serif;
   font-weight: ${props => props.symbol ? '600' : '400'};
-  color: #646464;
+  color: #505050;
   margin: 0 0.25rem;
 `
 
@@ -103,17 +113,24 @@ const FavoriteCoinsBar = () => {
 
   async function fetchFavoriteCoins() {
     try {
-      const response = await fetch(FETCH_FAVORITE_COINS_API_URL)
-      const fetchedCoinDetails = await response.json()
+      if (favoriteCoinIds != '') {
+        const response = await fetch(FETCH_FAVORITE_COINS_API_URL)
+        const fetchedCoinDetails = await response.json()
 
-      setFavoriteCoins(fetchedCoinDetails)
+        setFavoriteCoins(fetchedCoinDetails)
+        console.log('test1')
+      }
+      else {
+        setFavoriteCoins(undefined)
+        console.log('test2')
+      }
     } catch (err) {
       console.log(err)
     }
   }
 
   return (
-    <>
+      <StyledFavoriteCoinsContainer hasCoin={favoriteCoinIds != ''}>
       <StyledFavoriteCoinsBar>
         {favoriteCoins?.map((e) => {
           let priceChangeColor = e.price_change_percentage_24h > 0 ? "green" : e.price_change_percentage_24h == null ? 'gray' : 'red'
@@ -131,7 +148,7 @@ const FavoriteCoinsBar = () => {
         })}
       </StyledFavoriteCoinsBar>
       <StyledLine />
-    </>
+      </StyledFavoriteCoinsContainer>
   )
 }
 
