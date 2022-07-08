@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip
-} from "recharts"
+import Chart from 'react-apexcharts'
+import useStore from '../store'
+import Star from './svg/Star'
+import { ApexOptions } from "apexcharts"
+import dayjs from 'dayjs'
 
 type CoinDetailProps = {
   coinId: string
@@ -79,6 +76,10 @@ interface DetailPrice {
   priceChangeColor?: string
 }
 
+interface ChartDay {
+  selected: boolean
+}
+
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -90,16 +91,16 @@ const StyledContainer = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  width: 90%;
+  width: 80%;
+  margin-top: 2rem;
 `
 
 const StyledDetailContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 50%;
+  width: 40%;
   font-family: Roboto, sans-serif;
-  margin: 2rem;
 `
 
 const StyledDetailName = styled.div`
@@ -150,6 +151,37 @@ const StyledDetailElement = styled.div<DetailElement>`
   font-size: ${props => props.primary ? '1.5rem' : '1rem'};
 `
 
+const StyledChartDayContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  margin-top: 1rem;
+  border-radius: 1rem;
+`
+
+const StyledChartDay = styled.div<ChartDay>`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 3rem;
+  width: 5rem;
+  border: 2px solid #2085b8;
+  border-radius: 4rem;
+  background-color: ${props => props.selected ? '#0091da' : '#f5f5f5'} ;
+  color: ${props => props.selected ? '#f5f5f5' : '#0091da'};
+  user-select: none;
+  cursor: pointer;
+`
+
+const StyledChartContainer = styled.div`
+  width: 60%;
+  height: 100%;
+  display: block;
+  overflow: hidden;
+`
+
 const StyledLine = styled.div`
   height: 2px;
   width: 100%;
@@ -170,32 +202,34 @@ const StyledDescriptionHeader = styled.div`
   margin-left: 1rem;
 `
 
-const StyledDescription = styled.div`
+const StyledDescription = styled.p`
   margin: 0.5rem;
 `
 
 
 const CoinDetail = ({ coinId }: CoinDetailProps) => {
   const [coinDetails, setCoinDetails] = useState<CoinDetails>()
+  const [chartDays, setChartDays] = useState(7)
+  const [chartData, setChartData] = useState([])
+
   let priceChange = coinDetails?.market_data.price_change_percentage_24h || 0
   let priceChangeColor = priceChange > 0 ? "green" : priceChange == 0 ? 'gray' : 'red'
-  let chartData = coinDetails?.market_data.sparkline_7d.price.map((e, i) => {
-    return {
-      date: `${i % 24}:00`,
-      price: e.toFixed(2)
-    }
-  })
 
-  const API_URL = `https://api.coingecko.com/api/v3/coins/${coinId}?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=true`
+  const FETCH_COIN_API_URL = `https://api.coingecko.com/api/v3/coins/${coinId}?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=true`
+  const FETCH_CHART_DATA_API_URL = `https://api.coingecko.com/api/v3/coins/${coinId}/ohlc?vs_currency=usd&days=${chartDays}`
 
   useEffect(() => {
-    fetchCoins()
+    fetchChartData()
+    fetchCoin()
   }, [coinId])
 
+  useEffect(() => {
+    fetchChartData()
+  }, [chartDays])
 
-  async function fetchCoins() {
+  async function fetchCoin() {
     try {
-      const response = await fetch(API_URL)
+      const response = await fetch(FETCH_COIN_API_URL)
       const fetchedCoinDetails = await response.json()
       setCoinDetails(fetchedCoinDetails)
     } catch (err) {
@@ -217,6 +251,47 @@ const CoinDetail = ({ coinId }: CoinDetailProps) => {
     addFavorite(e)
   }
 
+  async function fetchChartData() {
+    try {
+      const response = await fetch(FETCH_CHART_DATA_API_URL)
+      const fetchedChartData = await response.json()
+      const data = fetchedChartData.map((e: Array<number>) => {
+        return {
+          x: new Date(e[0]),
+          y: e.slice(1)
+        }
+      })
+      setChartData(data)
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  const series = [{
+    name: 'Coin Values',
+    data: chartData
+  }]
+
+  const options: ApexOptions = {
+    chart: {
+      type: 'candlestick',
+      redrawOnWindowResize: true
+    },
+    xaxis: {
+      type: 'datetime',
+      labels: {
+        formatter: function (val) {
+          return dayjs(val).format('MMM DD HH:mm')
+        }
+      }
+    },
+    yaxis: {
+      tooltip: {
+        enabled: true
+      }
+    }
+  }
+
   return (
     <Wrapper>
       <StyledContainer>
@@ -234,42 +309,26 @@ const CoinDetail = ({ coinId }: CoinDetailProps) => {
           </StyledDetailPriceContainer>
           <StyledDetailElement>
             <div>Market Cap</div>
-            <div>{coinDetails?.market_data.market_cap.usd}</div>
+            <div>${coinDetails?.market_data.market_cap.usd}</div>
           </StyledDetailElement>
           <StyledDetailElement>
             <div>Market Cap Rank</div>
             <div>#{coinDetails?.market_cap_rank}</div>
           </StyledDetailElement>
           <StyledDetailElement>
-            <div>24h low/hig</div>
-            <div>{coinDetails?.market_data.low_24h.usd} / {coinDetails?.market_data.high_24h.usd}</div>
+            <div>24h lowest/highest</div>
+            <div>${coinDetails?.market_data.low_24h.usd} / ${coinDetails?.market_data.high_24h.usd}</div>
           </StyledDetailElement>
+          <StyledChartDayContainer>
+            <StyledChartDay selected={chartDays == 1} onClick={() => setChartDays(1)} >24hr</StyledChartDay>
+            <StyledChartDay selected={chartDays == 7} onClick={() => setChartDays(7)} >7d</StyledChartDay>
+            <StyledChartDay selected={chartDays == 30} onClick={() => setChartDays(30)} >30d</StyledChartDay>
+            <StyledChartDay selected={chartDays == 365} onClick={() => setChartDays(365)} >1yr</StyledChartDay>
+          </StyledChartDayContainer>
         </StyledDetailContainer>
-        <StyledDetailContainer>
-          <LineChart
-            width={700}
-            height={300}
-            data={chartData}
-            margin={{
-              top: 5,
-              right: 30,
-              left: 20,
-              bottom: 5
-            }}
-          >
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="date" />
-            <YAxis />
-            <Tooltip />
-            <Line
-              type="monotone"
-              dataKey="pv"
-              stroke="#8884d8"
-              activeDot={{ r: 8 }}
-            />
-            <Line type="monotone" dataKey="price" stroke="#3687d3" />
-          </LineChart>
-        </StyledDetailContainer>
+        <StyledChartContainer>
+          <Chart series={series} options={options} type="candlestick" />
+        </StyledChartContainer>
       </StyledContainer>
       <StyledDescriptionContainer>
         <StyledDescriptionHeader>Description</StyledDescriptionHeader>
