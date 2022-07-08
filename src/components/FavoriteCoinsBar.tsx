@@ -130,7 +130,7 @@ const FavoriteCoinsBar = () => {
   }
 
   return (
-      <StyledFavoriteCoinsContainer hasCoin={favoriteCoinIds != ''}>
+    <StyledFavoriteCoinsContainer hasCoin={favoriteCoinIds != ''}>
       <StyledFavoriteCoinsBar>
         {favoriteCoins?.map((e) => {
           let priceChangeColor = e.price_change_percentage_24h > 0 ? "green" : e.price_change_percentage_24h == null ? 'gray' : 'red'
@@ -148,7 +148,7 @@ const FavoriteCoinsBar = () => {
         })}
       </StyledFavoriteCoinsBar>
       <StyledLine />
-      </StyledFavoriteCoinsContainer>
+    </StyledFavoriteCoinsContainer>
   )
 }
 

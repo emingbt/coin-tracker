@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import Chart from 'react-apexcharts'
 import useStore from '../store'
 import Star from './svg/Star'
-import { ApexOptions } from "apexcharts"
-import dayjs from 'dayjs'
+import DetailChart from './charts/DetailChart'
 
 type CoinDetailProps = {
   coinId: string
@@ -267,31 +265,6 @@ const CoinDetail = ({ coinId }: CoinDetailProps) => {
     }
   }
 
-  const series = [{
-    name: 'Coin Values',
-    data: chartData
-  }]
-
-  const options: ApexOptions = {
-    chart: {
-      type: 'candlestick',
-      redrawOnWindowResize: true
-    },
-    xaxis: {
-      type: 'datetime',
-      labels: {
-        formatter: function (val) {
-          return dayjs(val).format('MMM DD HH:mm')
-        }
-      }
-    },
-    yaxis: {
-      tooltip: {
-        enabled: true
-      }
-    }
-  }
-
   return (
     <Wrapper>
       <StyledContainer>
@@ -327,7 +300,7 @@ const CoinDetail = ({ coinId }: CoinDetailProps) => {
           </StyledChartDayContainer>
         </StyledDetailContainer>
         <StyledChartContainer>
-          <Chart series={series} options={options} type="candlestick" />
+          <DetailChart chartData={chartData}/>
         </StyledChartContainer>
       </StyledContainer>
       <StyledDescriptionContainer>

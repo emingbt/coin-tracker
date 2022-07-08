@@ -165,7 +165,7 @@ const CoinsList = ({ page }: CoinsListType) => {
   console.log(favoriteCoins)
 
   const addToFavorites = (e: string) => {
-    if(favoriteCoins.includes(e)) {
+    if (favoriteCoins.includes(e)) {
       favoriteCoins.splice(favoriteCoins.indexOf(e), 1)
       removeFavorite(favoriteCoins)
       return
@@ -194,7 +194,7 @@ const CoinsList = ({ page }: CoinsListType) => {
             return (
               <StyledTableRow key={i}>
                 <StyledTableData>
-                  <StyledStarContainer onClick={() => addToFavorites(e.id)} style={{ marginTop: '2px', marginRight: '4px'}}>
+                  <StyledStarContainer onClick={() => addToFavorites(e.id)} style={{ marginTop: '2px', marginRight: '4px' }}>
                     <Star selected={favoriteCoins.includes(e.id)} />
                   </StyledStarContainer>
                   {(+page - 1) * 100 + i + 1}
